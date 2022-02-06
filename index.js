@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import transactionModel from './model/transactionModel.js';
 import router from './routers/transactions/transactionRouters.js';
 
-const PORT = 3000;
+const PORT = 5000;
 
 const app = express();
 
