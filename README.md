@@ -1,1 +1,1 @@
-# kapusta-backend2
+# kapusta-backend
