@@ -3,16 +3,13 @@ import mongoose from 'mongoose';
 import transactionModel from './model/transactionModel.js';
 import router from './routers/transactions/transactionRouters.js';
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 
 const app = express();
 
 app.use(express.json());
 
-app.use(express.static('public'));
-
 app.use('/api', router);
-
 
 // app.get ('/api/transactions', (req,res)=>{
 //     res.status (200).json('Сервер работает! Это страница для доступа к транзакциям. ')
