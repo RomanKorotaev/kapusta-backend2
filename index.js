@@ -9,7 +9,10 @@ const app = express();
 
 app.use(express.json());
 
+app.use(express.static('public'));
+
 app.use('/api', router);
+
 
 // app.get ('/api/transactions', (req,res)=>{
 //     res.status (200).json('Сервер работает! Это страница для доступа к транзакциям. ')
