@@ -1,40 +1,54 @@
 import express from 'express';
 import mongoose from 'mongoose';
-import transactionModel from './model/transactionModel.js';
+import helmet from 'helmet';
+import cors from 'cors';
 import router from './routers/transactions/transactionRouters.js';
+import routerUser from './routers/users/authenticationRouters.js';
+import { LIMIT_JSON } from './lib/constants.js';
+import { HttpCode } from './lib/constants.js';
 
-const PORT = process.env.PORT || 3000;
+
+
+/////////////
+// const PORT = process.env.PORT || 5000
 
 const app = express();
+app.use(helmet());
+app.use(cors());
+app.use(express.json({ limit: LIMIT_JSON }));
 
-app.use(express.json());
-
+app.use(cors());
 app.use('/api', router);
+app.use('/api/users', routerUser);
 
-// app.get ('/api/transactions', (req,res)=>{
-//     res.status (200).json('Сервер работает! Это страница для доступа к транзакциям. ')
-//  })
+app.use((_req, res) => {
+  res
+    .status(HttpCode.NOT_FOUND)
+    .json({ status: 'error', code: HttpCode.NOT_FOUND, message: 'Not found' });
+});
 
-//  app.post ('/api/transactions', async (req,res)=>{
-//      try {
-//             const {transactionType, sum, category, destination} =req.body
-//             const createTransaction = await transactionModel.create({transactionType, sum, category, destination})
-//             console.log ('req.body : ', req.body)
-//             res.status (201).json(createTransaction)
-//      } catch (err){
-//         res.status (500).json (err)
-//      }
-
-//     }
-//  )
 
 async function startApp() {
   try {
     await mongoose.connect(process.env.DB_URL);
-    app.listen(PORT, () => console.log('Server is running on PORT ' + PORT));
+
+      app.listen(process.env.PORT, () =>
+      console.log('Server is running on PORT ' + process.env.PORT),
+    );
   } catch (err) {
     console.log('err : ', err);
   }
 }
+
+// mongoose.connection.on ('disconnected', ()=>{
+//   console.log ('Mongoose disconnected from DB.');
+// })
+
+//Этот код срабатывает для отключения от базы данных, когда нижимаем Ctrl+C
+// process.on('SIGINT', async () => {
+//   mongoose.connection.close();
+//   console.log ('Connection DB closed');
+//   process.exit(1)
+// })
 
 startApp();
