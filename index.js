@@ -6,8 +6,9 @@ import router from './routers/transactions/transactionRouters.js';
 import routerUser from './routers/users/authenticationRouters.js';
 import { LIMIT_JSON } from './lib/constants.js';
 import { HttpCode } from './lib/constants.js';
-
-
+import swaggerUi from 'swagger-ui-express';
+import swaggerDocument from './swagger.json';
+import authRouter from './routers/auth/authenticationGoogleRouters.js';
 
 /////////////
 // const PORT = process.env.PORT || 5000
@@ -18,8 +19,10 @@ app.use(cors());
 app.use(express.json({ limit: LIMIT_JSON }));
 
 app.use(cors());
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use('/api', router);
 app.use('/api/users', routerUser);
+app.use('/auth', authRouter);
 
 app.use((_req, res) => {
   res
@@ -27,12 +30,11 @@ app.use((_req, res) => {
     .json({ status: 'error', code: HttpCode.NOT_FOUND, message: 'Not found' });
 });
 
-
 async function startApp() {
   try {
     await mongoose.connect(process.env.DB_URL);
 
-      app.listen(process.env.PORT, () =>
+    app.listen(process.env.PORT, () =>
       console.log('Server is running on PORT ' + process.env.PORT),
     );
   } catch (err) {
