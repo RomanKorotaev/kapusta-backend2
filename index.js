@@ -11,7 +11,7 @@ import swaggerDocument from './swagger.json';
 import authRouter from './routers/auth/authenticationGoogleRouters.js';
 
 /////////////
-// const PORT = process.env.PORT || 5000
+// const PORT = process.env.PORT || 3000
 
 const app = express();
 app.use(helmet());
